@@ -18,10 +18,25 @@ import {
 import { client } from '@/src/sanity/client';
 import { PortableText } from '@portabletext/react';
 import { motion } from 'framer-motion';
+import { TypedObject } from 'sanity';
+
+
+
+// ✅ Typage des tarifs et de l'agenda
+interface Tarif {
+    _id: string;
+    title: string;
+    price: number;
+    description: TypedObject;
+}
+
+interface Agenda {
+    url: string;
+}
 
 export default function TarifsPage() {
-    const [tarifs, setTarifs] = useState([]);
-    const [agenda, setAgenda] = useState<{ url: string } | null>(null);
+    const [tarifs, setTarifs] = useState<Tarif[]>([]);
+    const [agenda, setAgenda] = useState<Agenda | null>(null);
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState('');
 
@@ -49,21 +64,21 @@ export default function TarifsPage() {
 
     useEffect(() => {
         const fetchTarifs = async () => {
-            const data = await client.fetch(
+            const data: Tarif[] = await client.fetch(
                 `*[_type == "prices"] | order(price asc){
-            _id,
-            title,
-            price,
-            description,
+          _id,
+          title,
+          price,
+          description
         }`
             );
-            const AgendData = await client.fetch(
+            const agendaData: Agenda[] = await client.fetch(
                 `*[_type == "agenda"] | order(_createdAt desc){
-          url,
+          url
         }`
             );
             setTarifs(data);
-            setAgenda(AgendData[0]);
+            setAgenda(agendaData[0]);
         };
         fetchTarifs();
     }, []);
@@ -81,10 +96,17 @@ export default function TarifsPage() {
                         <TabsTrigger value="accordeon">Tarifs</TabsTrigger>
                         <TabsTrigger value="agenda">Disponibilités</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="accordeon" className="w-full h-full flex justify-center items-start mt-5">
+                    <TabsContent
+                        value="accordeon"
+                        className="w-full h-full flex justify-center items-start mt-5"
+                    >
                         <Accordion type="single" collapsible className="w-full h-full">
                             {tarifs.map((tarif) => (
-                                <AccordionItem key={tarif._id} value={tarif._id} className="border-b-2">
+                                <AccordionItem
+                                    key={tarif._id}
+                                    value={tarif._id}
+                                    className="border-b-2"
+                                >
                                     <AccordionTrigger className="w-full flex justify-between items-center pb-6 text-2xl font-semibold">
                                         <span className="text-left">{tarif.title}</span>
                                         <span className="ml-auto">{tarif.price} €</span>
@@ -96,7 +118,10 @@ export default function TarifsPage() {
                             ))}
                         </Accordion>
                     </TabsContent>
-                    <TabsContent value="agenda" className="w-full h-full flex flex-col justify-center items-center">
+                    <TabsContent
+                        value="agenda"
+                        className="w-full h-full flex flex-col justify-center items-center"
+                    >
                         {agenda ? (
                             <iframe
                                 src={agenda.url}
@@ -113,6 +138,7 @@ export default function TarifsPage() {
                         )}
                     </TabsContent>
                 </Tabs>
+
                 <div className="w-full flex justify-center items-center">
                     <Sheet>
                         <SheetTrigger className="bg-[#2B2B2B] hover:bg-[#1a1a1a] md:w-1/6 text-white p-4 m-4 cursor-pointer flex justify-center space-x-2">
@@ -122,12 +148,17 @@ export default function TarifsPage() {
                             <SheetHeader>
                                 <SheetTitle>Contactez-moi</SheetTitle>
                             </SheetHeader>
-                            <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mt-4">
+                            <form
+                                onSubmit={handleSubmit}
+                                className="flex flex-col space-y-4 mt-4"
+                            >
                                 <input
                                     type="text"
                                     placeholder="Votre nom"
                                     value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, name: e.target.value })
+                                    }
                                     required
                                     className="border rounded p-2"
                                 />
@@ -135,21 +166,30 @@ export default function TarifsPage() {
                                     type="email"
                                     placeholder="Votre email"
                                     value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, email: e.target.value })
+                                    }
                                     required
                                     className="border rounded p-2"
                                 />
                                 <textarea
                                     placeholder="Votre message"
                                     value={formData.message}
-                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, message: e.target.value })
+                                    }
                                     required
                                     className="border rounded p-2 h-32"
                                 />
-                                <button type="submit" className="bg-black text-white py-2 rounded hover:bg-gray-800">
+                                <button
+                                    type="submit"
+                                    className="bg-black text-white py-2 rounded hover:bg-gray-800"
+                                >
                                     Envoyer
                                 </button>
-                                {status && <p className="text-center text-sm">{status}</p>}
+                                {status && (
+                                    <p className="text-center text-sm">{status}</p>
+                                )}
                             </form>
                         </SheetContent>
                     </Sheet>
