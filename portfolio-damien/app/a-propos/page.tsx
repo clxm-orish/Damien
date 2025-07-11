@@ -10,14 +10,15 @@ import { motion } from 'framer-motion';
 import { usePageTransition } from '../../hooks/PageTransitionProvider';
 import Image from 'next/image';
 import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import { TypedObject } from 'sanity';
 
 const builder = imageUrlBuilder(client);
 const urlFor = (source: SanityImageSource) => builder.image(source);
 
 interface AboutData {
   title: string;
-  image: unknown;
-  description: unknown;
+  image: SanityImageSource;
+  description: TypedObject[];
 }
 
 const ABOUT_QUERY = `*[_type == "a-propos" && slug.current == $slug][0]{
@@ -61,7 +62,7 @@ export default function AboutPage() {
           <div className="md:w-1/2 pl-8 h-full">
             <h1 className="text-6xl font-bold mb-6">{data.title}</h1>
             <article className='text-left text-lg text-gray-700'>
-              <PortableText value={data.description} className="mb-4"/>
+              <PortableText value={data.description} />
             </article>
             <div className="w-full flex justify-start pt-4">
               <Button onClick={() => startTransition(`/portfolio`)} asChild className="bg-[#2B2B2B] hover:bg-[#1a1a1a] text-white cursor-pointer">

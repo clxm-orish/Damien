@@ -16,9 +16,11 @@ import "swiper/css/effect-fade";
 import { motion } from "framer-motion";
 import { usePageTransition } from '../../hooks/PageTransitionProvider';
 import Image from 'next/image';
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import { TypedObject } from 'sanity';
 
 const { projectId, dataset } = client.config();
-const urlFor = (source: unknown) =>
+const urlFor = (source: SanityImageSource) =>
     projectId && dataset ? imageUrlBuilder({ projectId, dataset }).image(source) : null;
 
 const EVENTS_QUERY = defineQuery(`*[_type == "event"] | order(_createdAt desc) {
@@ -35,8 +37,8 @@ export default function PortfolioPage() {
         {
             title: string;
             slug: { current: string };
-            image: unknown;
-            description: unknown;
+            image: SanityImageSource;
+            description: TypedObject;
             imageUrl?: string;
         }[]
     >([]);
@@ -47,21 +49,21 @@ export default function PortfolioPage() {
     interface Event {
         title: string;
         slug: { current: string };
-        image: unknown;
-        description: unknown;
-    }
-
-    useEffect(() => {
+        image: SanityImageSource;
+        description: TypedObject;
+      }
+      
+      useEffect(() => {
         const fetchEvents = async () => {
-            const res: Event[] = await client.fetch(EVENTS_QUERY);
-            const formatted = res.map((e) => ({
-                ...e,
-                imageUrl: urlFor(e.image)?.width(1600).url(),
-            }));
-            setEvents(formatted);
+          const res: Event[] = await client.fetch(EVENTS_QUERY);
+          const formatted = res.map((e) => ({
+            ...e,
+            imageUrl: urlFor(e.image)?.width(1600).url(),
+          }));
+          setEvents(formatted);
         };
         fetchEvents();
-    }, []);
+      }, []);
 
     useEffect(() => {
         if (events.length) endPageLoad();
