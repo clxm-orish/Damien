@@ -17,11 +17,8 @@ const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
     projectId && dataset ? imageUrlBuilder({ projectId, dataset }).image(source) : null;
 
-interface Props{
-        slug: string;
-}
 
-export default async function GalleryPage({ params }: { params: Props}) {
+export default async function GalleryPage({ params }: { params: { slug: string } }) {
     const { slug } = params;
 
     const { data: imagesDoc } = await sanityFetch({
