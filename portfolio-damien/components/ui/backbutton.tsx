@@ -9,7 +9,7 @@ export default function BackButton() {
 
     return (
         <div className="w-full flex justify-start pt-4 ">
-            <Button onClick={() => router.back()} className="bg-[#2B2B2B] hover:bg-[#1a1a1a] text-white cursor-pointer">
+            <Button onClick={() => router.back()} className="bg-[#2B2B2B] hover:bg-[#1a1a1a] text-white cursor-pointer position-sticky top-0 z-10">
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
                 Retour
             </Button>

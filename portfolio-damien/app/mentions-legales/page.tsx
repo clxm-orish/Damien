@@ -21,7 +21,7 @@ export default function MentionsLegalesPage() {
 
             <h2>Propriété intellectuelle</h2>
             <p>
-                Tous les contenus présents sur ce site sont protégés par le droit d'auteur. Toute reproduction est interdite.
+                Tous les contenus présents sur ce site sont protégés par le droit d&apos;auteur. Toute reproduction est interdite.
             </p>
 
             <h2>Contact</h2>
@@ -29,4 +29,3 @@ export default function MentionsLegalesPage() {
         </main>
     );
 }
-  

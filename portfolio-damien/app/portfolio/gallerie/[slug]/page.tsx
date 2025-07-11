@@ -5,11 +5,8 @@ import imageUrlBuilder from "@sanity/image-url";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { defineQuery } from "next-sanity";
 import Image from "next/image";
-import { notFound } from "next/navigation";
-import BackButton from "../../../../components/ui/backbutton"; 
-import GalleryMountNotifier from "@/components/GallerieMountNotifier";// 🔄 Composant client séparé
-
-
+import BackButton from "../../../../components/ui/backbutton";
+import GalleryMountNotifier from "@/components/GallerieMountNotifier"; // 🔄 Composant client séparé
 
 const IMAGES_QUERY = defineQuery(`*[_type == "images" && slug.current == $slug][0] {
   title,
@@ -18,9 +15,7 @@ const IMAGES_QUERY = defineQuery(`*[_type == "images" && slug.current == $slug][
 
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
-    projectId && dataset
-        ? imageUrlBuilder({ projectId, dataset }).image(source)
-        : null;
+    projectId && dataset ? imageUrlBuilder({ projectId, dataset }).image(source) : null;
 
 export default async function GalleryPage({ params }: { params: { slug: string } }) {
     const { slug } = params;
@@ -32,29 +27,25 @@ export default async function GalleryPage({ params }: { params: { slug: string }
 
     if (!imagesDoc || !imagesDoc.gallery || imagesDoc.gallery.length === 0) {
         return (
-            <main className="h-full flex flex-col justify-center items-center p-6 sm:p-12 ">
-                <div className="w-1/2 align-center justify-center  ">
+            <main className="h-full flex flex-col justify-center items-center p-6 sm:p-12">
+                <div className="w-1/2 align-center justify-center">
                     <BackButton />
-                    <p className="text-start text-lg text-gray-700 mt-6 ">
+                    <p className="text-start text-lg text-gray-700 mt-6">
                         Il n&apos;y a pas encore de photos pour ce projet.
                     </p>
                 </div>
-
             </main>
         );
     }
 
-    const { title, gallery } = imagesDoc;
-
     return (
-
-        <main className="h-screen overflow-y-auto p-6 sm:p-12 ">
+        <main className="h-screen overflow-y-auto p-6 sm:p-12">
             <GalleryMountNotifier />
             <div className="mb-6">
                 <BackButton/>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
-                {gallery.map((image, index) => {
+                {imagesDoc.gallery.map((image: SanityImageSource, index: number) => {
                     const url = urlFor(image)?.width(600).url();
                     return url ? (
                         <Image
@@ -69,6 +60,5 @@ export default async function GalleryPage({ params }: { params: { slug: string }
                 })}
             </div>
         </main>
-
     );
 }

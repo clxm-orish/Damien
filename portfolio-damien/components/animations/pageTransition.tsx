@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname } from 'next/navigation';
 import { usePageTransition } from '@/hooks/PageTransitionProvider';
 
 export default function PageTransition({ children }: { children: React.ReactNode }) {

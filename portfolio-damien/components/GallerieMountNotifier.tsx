@@ -7,8 +7,9 @@ export default function GalleryMountNotifier() {
     const { endPageLoad } = usePageTransition();
 
     useEffect(() => {
-        endPageLoad(); // Signale que la page Galerie est montée
+        endPageLoad(); 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return null; // Pas besoin d'afficher quoi que ce soit
+    return null; 
 }

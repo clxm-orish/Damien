@@ -15,9 +15,10 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { motion } from "framer-motion";
 import { usePageTransition } from '../../hooks/PageTransitionProvider';
+import Image from 'next/image';
 
 const { projectId, dataset } = client.config();
-const urlFor = (source: any) =>
+const urlFor = (source: unknown) =>
     projectId && dataset ? imageUrlBuilder({ projectId, dataset }).image(source) : null;
 
 const EVENTS_QUERY = defineQuery(`*[_type == "event"] | order(_createdAt desc) {
@@ -29,16 +30,19 @@ const EVENTS_QUERY = defineQuery(`*[_type == "event"] | order(_createdAt desc) {
 
 export default function PortfolioPage() {
     const { startTransition, endPageLoad } = usePageTransition();
-    const swiperRef = useRef<any>(null);
-    const [events, setEvents] = useState<any[]>([]);
+    const swiperRef = useRef<{ slideNext: () => void; slidePrev: () => void } | null>(null);
+    const [events, setEvents] = useState<
+        {
+            title: string;
+            slug: { current: string };
+            image: unknown;
+            description: unknown;
+            imageUrl?: string;
+        }[]
+    >([]);
 
-    const goNext = () => {
-        if (swiperRef.current) swiperRef.current.slideNext();
-    };
-
-    const goPrev = () => {
-        if (swiperRef.current) swiperRef.current.slidePrev();
-    };
+    const goNext = () => swiperRef.current?.slideNext();
+    const goPrev = () => swiperRef.current?.slidePrev();
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -52,23 +56,22 @@ export default function PortfolioPage() {
         fetchEvents();
     }, []);
 
-    // 🔥 Quand les événements sont chargés, on ferme le rideau
     useEffect(() => {
-        if (events.length) {
-            endPageLoad();
-        }
+        if (events.length) endPageLoad();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [events]);
 
     if (!events.length) return null;
 
     return (
-        <div className="w-full h-full m-8 flex justify-center items-center">
+        <div className="md:w-full md:h-full md:m-8 md:flex md:justify-center md:items-center">
             <motion.div
                 initial={{ opacity: 0, y: 70 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
             >
-                <div className="w-full max-w-5xl h-[1000px] rounded-lg overflow-hidden flex">
+                {/* Swiper desktop */}
+                <div className="hidden md:flex w-full max-w-5xl h-[1000px] rounded-lg overflow-hidden">
                     <Swiper
                         modules={[Navigation, Pagination, Autoplay, EffectFade]}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -80,10 +83,7 @@ export default function PortfolioPage() {
                         className="w-full h-full"
                     >
                         {events.map((event, index) => (
-                            <SwiperSlide
-                                key={index}
-                                className="flex flex-col items-center justify-center text-center p-6 w-full h-full"
-                            >
+                            <SwiperSlide key={index} className="flex flex-col items-center justify-center text-center p-6 w-full h-full">
                                 <div className="relative w-full h-full flex flex-col items-center justify-center overflow-hidden">
                                     <div className="relative w-full items-center justify-center overflow-hidden">
                                         <Button
@@ -96,9 +96,11 @@ export default function PortfolioPage() {
                                         </Button>
 
                                         {event.imageUrl && (
-                                            <img
+                                            <Image
                                                 src={event.imageUrl}
                                                 alt={event.title}
+                                                width={1600}
+                                                height={900}
                                                 className="object-cover max-h-[500px] w-full"
                                             />
                                         )}
@@ -137,6 +139,40 @@ export default function PortfolioPage() {
                         ))}
                     </Swiper>
                 </div>
+
+                {/* Liste en colonne sur mobile */}
+                <div className="block md:hidden flex flex-col space-y-4">
+                    {events.map((event, index) => (
+                        <div
+                            key={index}
+                            className="flex flex-row bg-white  shadow p-4"
+                        >
+                            {event.imageUrl && (
+                                <Image
+                                    src={event.imageUrl}
+                                    alt={event.title}
+                                    width={160}
+                                    height={120}
+                                    className=" object-cover w-1/4 mi'h-full"
+                                />
+                            )}
+
+                            <div className=" w-3/4 ml-4 flex flex-col justify-between">
+                                <h2 className="text-lg font-semibold">{event.title}</h2>
+                                <div className="text-gray-600 text-sm line-clamp-2">
+                                    <PortableText value={event.description} />
+                                </div>
+                                <Button
+                                    onClick={() => startTransition(`/portfolio/gallerie/gallery-${event.slug.current}`)}
+                                    className="mt-2 bg-[#2B2B2B] hover:bg-[#1a1a1a] text-white py-1 px-2 text-xs"
+                                >
+                                    Photos →
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
             </motion.div>
         </div>
     );

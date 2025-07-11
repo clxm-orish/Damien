@@ -1,33 +1,29 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Calendar } from "@/components/ui/calendar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import React, { useState, useEffect } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "@/components/ui/accordion"
+} from '@/components/ui/accordion';
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "@/components/ui/sheet"
-import { client } from "@/src/sanity/client";
-import { PortableText } from "@portabletext/react";
-import { motion } from "framer-motion";
+} from '@/components/ui/sheet';
+import { client } from '@/src/sanity/client';
+import { PortableText } from '@portabletext/react';
+import { motion } from 'framer-motion';
 
 export default function TarifsPage() {
-    const [date, setDate] = useState<Date | undefined>(new Date());
     const [tarifs, setTarifs] = useState([]);
     const [agenda, setAgenda] = useState<{ url: string } | null>(null);
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState('');
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -44,29 +40,27 @@ export default function TarifsPage() {
                 setStatus('Message envoyé !');
                 setFormData({ name: '', email: '', message: '' });
             } else {
-                setStatus('Erreur lors de l\'envoi.');
+                setStatus("Erreur lors de l'envoi.");
             }
-        } catch (err) {
+        } catch {
             setStatus('Erreur de connexion.');
         }
     };
-      
 
     useEffect(() => {
         const fetchTarifs = async () => {
             const data = await client.fetch(
                 `*[_type == "prices"] | order(price asc){
-                    _id,
-                    title,
-                    price,
-                    description,
-
-                }`
+            _id,
+            title,
+            price,
+            description,
+        }`
             );
             const AgendData = await client.fetch(
                 `*[_type == "agenda"] | order(_createdAt desc){
-                url,
-            }`
+          url,
+        }`
             );
             setTarifs(data);
             setAgenda(AgendData[0]);
@@ -79,29 +73,29 @@ export default function TarifsPage() {
             initial={{ opacity: 0, y: 70 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className='w-full h-full '
+            className="w-full h-full"
         >
-        <main className="w-full h-full p-8 flex flex-col justify-center items-center">
-            <Tabs defaultValue="accordeon" className="w-full flex h-full items-center">
-                <TabsList className="grid w-full grid-cols-2">
+            <main className="w-full h-full p-8 flex flex-col justify-center items-center">
+                <Tabs defaultValue="accordeon" className="w-full flex h-full items-center">
+                    <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="accordeon">Tarifs</TabsTrigger>
                         <TabsTrigger value="agenda">Disponibilités</TabsTrigger>
-                </TabsList>
-                <TabsContent value="accordeon" className="w-full h-full flex justify-center items-start mt-5">
-                    <Accordion type="single" collapsible className="w-full h-full">
-                        {tarifs.map((tarif) => (
-                            <AccordionItem key={tarif._id} value={tarif._id} className="border-b-2 ">
-                                <AccordionTrigger className="w-full flex justify-between items-center pb-6 text-2xl font-semibold">
-                                    <span className="text-left">{tarif.title}</span>
-                                    <span className="ml-auto">{tarif.price} €</span>
-                                </AccordionTrigger>
-                                <AccordionContent className="pb-6 text-lg  w-2/3 opacity-75">
-                                    <PortableText value={tarif.description} />
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                </TabsContent>
+                    </TabsList>
+                    <TabsContent value="accordeon" className="w-full h-full flex justify-center items-start mt-5">
+                        <Accordion type="single" collapsible className="w-full h-full">
+                            {tarifs.map((tarif) => (
+                                <AccordionItem key={tarif._id} value={tarif._id} className="border-b-2">
+                                    <AccordionTrigger className="w-full flex justify-between items-center pb-6 text-2xl font-semibold">
+                                        <span className="text-left">{tarif.title}</span>
+                                        <span className="ml-auto">{tarif.price} €</span>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="pb-6 text-lg md:w-2/3 opacity-75">
+                                        <PortableText value={tarif.description} />
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </TabsContent>
                     <TabsContent value="agenda" className="w-full h-full flex flex-col justify-center items-center">
                         {agenda ? (
                             <iframe
@@ -110,7 +104,7 @@ export default function TarifsPage() {
                                 height="600"
                                 frameBorder="0"
                                 scrolling="no"
-                                className="w-full  rounded border"
+                                className="w-full rounded border"
                             ></iframe>
                         ) : (
                             <div className="text-center text-lg text-gray-500">
@@ -118,10 +112,10 @@ export default function TarifsPage() {
                             </div>
                         )}
                     </TabsContent>
-            </Tabs>
-            <div className="w-full flex justify-center items-center">
+                </Tabs>
+                <div className="w-full flex justify-center items-center">
                     <Sheet>
-                        <SheetTrigger className="bg-[#2B2B2B] hover:bg-[#1a1a1a] w-1/6 text-white p-4 m-4 cursor-pointer flex justify-center space-x-2">
+                        <SheetTrigger className="bg-[#2B2B2B] hover:bg-[#1a1a1a] md:w-1/6 text-white p-4 m-4 cursor-pointer flex justify-center space-x-2">
                             Prendre Contact
                         </SheetTrigger>
                         <SheetContent>
@@ -159,8 +153,8 @@ export default function TarifsPage() {
                             </form>
                         </SheetContent>
                     </Sheet>
-            </div>
-        </main>
+                </div>
+            </main>
         </motion.div>
     );
 }
