@@ -9,9 +9,10 @@ import { ArrowRightIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { usePageTransition } from '../../hooks/PageTransitionProvider';
 import Image from 'next/image';
+import { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
 const builder = imageUrlBuilder(client);
-const urlFor = (source: unknown) => builder.image(source);
+const urlFor = (source: SanityImageSource) => builder.image(source);
 
 interface AboutData {
   title: string;
