@@ -7,7 +7,7 @@ import { defineQuery } from "next-sanity";
 import Image from "next/image";
 import BackButton from "../../../../components/ui/backbutton";
 import GalleryMountNotifier from "@/components/GallerieMountNotifier"; // 🔄 Composant client séparé
-import { use } from "react";
+
 
 const IMAGES_QUERY = defineQuery(`*[_type == "images" && slug.current == $slug][0] {
   title,
@@ -20,7 +20,7 @@ const urlFor = (source: SanityImageSource) =>
 
 
 export default async function GalleryPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+    const { slug } = await params;
 
     const { data: imagesDoc } = await sanityFetch({
         query: IMAGES_QUERY,
