@@ -108,7 +108,7 @@ export default function TarifsPage() {
                             ></iframe>
                         ) : (
                             <div className="text-center text-lg text-gray-500">
-                                Chargement de l'agenda...
+                                Chargement de l&apos;agenda...
                             </div>
                         )}
                     </TabsContent>

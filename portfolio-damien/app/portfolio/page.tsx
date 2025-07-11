@@ -44,10 +44,17 @@ export default function PortfolioPage() {
     const goNext = () => swiperRef.current?.slideNext();
     const goPrev = () => swiperRef.current?.slidePrev();
 
+    interface Event {
+        title: string;
+        slug: { current: string };
+        image: unknown;
+        description: unknown;
+    }
+
     useEffect(() => {
         const fetchEvents = async () => {
-            const res = await client.fetch(EVENTS_QUERY);
-            const formatted = res.map((e: any) => ({
+            const res: Event[] = await client.fetch(EVENTS_QUERY);
+            const formatted = res.map((e) => ({
                 ...e,
                 imageUrl: urlFor(e.image)?.width(1600).url(),
             }));
