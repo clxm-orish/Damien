@@ -21,9 +21,9 @@ interface Props{
         slug: string;
 }
 
-export default async function GalleryPage({ params }: { params: Props}) {
+export default async function GalleryPage({ params }: { params: { slug: string } }) {
     const { slug } = params;
-
+    
     const { data: imagesDoc } = await sanityFetch({
         query: IMAGES_QUERY,
         params: { slug },
