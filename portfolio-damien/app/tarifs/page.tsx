@@ -125,11 +125,11 @@ export default function TarifsPage() {
                         {agenda ? (
                             <iframe
                                 src={agenda.url}
-                                width="800"
+                                width="100%"
                                 height="600"
                                 frameBorder="0"
                                 scrolling="no"
-                                className="w-full rounded border"
+                                className="w-full h-[50vh] md:h-[600px] rounded border"
                             ></iframe>
                         ) : (
                             <div className="text-center text-lg text-gray-500">
@@ -141,7 +141,7 @@ export default function TarifsPage() {
 
                 <div className="w-full flex justify-center items-center">
                     <Sheet>
-                        <SheetTrigger className="bg-[#2B2B2B] hover:bg-[#1a1a1a] md:w-1/6 text-white p-4 m-4 cursor-pointer flex justify-center space-x-2">
+                        <SheetTrigger className="bg-[#2B2B2B] hover:bg-[#1a1a1a] w-full md:w-1/6 text-white p-4 m-4 cursor-pointer flex justify-center space-x-2">
                             Prendre Contact
                         </SheetTrigger>
                         <SheetContent>
