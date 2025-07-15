@@ -10,7 +10,7 @@ export async function POST(req: Request) {
         const data = await resend.emails.send({
             from: 'onboarding@resend.dev', // adresse par défaut Resend
             to: 'clmwebagency@gmail.com',
-            reply_to: body.email, // <-- Permet de "répondre" au vrai utilisateur
+            replyTo: body.email, // <-- Permet de "répondre" au vrai utilisateur
             subject: `Nouveau message de ${body.name}`,
             text: `Email de l'utilisateur : ${body.email}\n\nMessage :\n${body.message}`,
         });
