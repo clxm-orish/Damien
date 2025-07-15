@@ -59,6 +59,7 @@ export default function Navbar() {
                     </div>
                     <p className="mb-4 text-xs text-muted-foreground">DamienVigouroux@gmail.com</p>
                     <a href="/mentions-legales" className="italic font-medium text-sm">Mentions légales</a>
+                    <a href="/traitement-des-cookies" className="italic font-medium text-sm">Traitement des cookies</a>
                 </div>
             </div>
 
@@ -103,6 +104,7 @@ export default function Navbar() {
                     </div>
                     <p className="text-xs text-muted-foreground">DamienVigouroux@gmail.com</p>
                     <a href="/mentions-legales" className="italic text-sm">Mentions légales</a>
+                    <a href="/traitement-des-cookies" className="italic text-sm">Traitement des cookies</a>
                 </div>
             </div>
         </>

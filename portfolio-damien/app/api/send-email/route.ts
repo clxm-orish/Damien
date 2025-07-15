@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     try {
         const data = await resend.emails.send({
-            from: 'onboarding@resend.dev',  // ou un email vérifié sur Resend
+            from: body.email,
             to: 'clmwebagency@gmail.com',
             subject: `Nouveau message de ${body.name}`,
             text: `Email: ${body.email}\n\nMessage:\n${body.message}`,
