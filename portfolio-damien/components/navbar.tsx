@@ -63,55 +63,48 @@ export default function Navbar() {
             </div>
 
             {/* Menu mobile slide */}
-            {menuOpen && (
-                <>
-                    {/* Overlay clic extérieur */}
-                    <div
-                        className="fixed inset-0 z-40 bg-black/30"
-                        onClick={() => setMenuOpen(false)}
-                    ></div>
+            {/* Overlay clic extérieur */}
+            <div
+                className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-300 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'}`}
+                onClick={() => setMenuOpen(false)}
+            ></div>
 
-                    {/* Menu mobile slide depuis la droite */}
-                    <div
-                        className={`fixed top-0 right-0 h-full w-2/3 max-w-sm bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out
-              ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
-              flex flex-col justify-between p-6
-            `}
-                    >
-                        {/* Bouton croix dans le menu */}
-                        <button
+            {/* Menu mobile slide depuis la droite */}
+            <div
+                className={`fixed top-0 right-0 h-full w-2/3 max-w-sm bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${menuOpen ? 'translate-x-0' : 'translate-x-full pointer-events-none'} flex flex-col justify-between p-6`}
+            >
+                {/* Bouton croix dans le menu */}
+                <button
+                    onClick={() => setMenuOpen(false)}
+                    className="absolute top-4 right-4 p-2"
+                >
+                    <X className="w-8 h-8" />
+                </button>
+
+                {/* Liens du menu alignés à droite */}
+                <div className="flex flex-col items-end space-y-4 mt-12">
+                    {links.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={`text-xl ${pathname === link.href ? 'font-bold' : ''}`}
                             onClick={() => setMenuOpen(false)}
-                            className="absolute top-4 right-4 p-2"
                         >
-                            <X className="w-8 h-8" />
-                        </button>
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
 
-                        {/* Liens du menu alignés à droite */}
-                        <div className="flex flex-col items-end space-y-4 mt-12">
-                            {links.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={`text-xl ${pathname === link.href ? 'font-bold' : ''}`}
-                                    onClick={() => setMenuOpen(false)}
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </div>
-
-                        {/* Footer du menu */}
-                        <div className="flex flex-col items-end space-y-2 mt-6">
-                            <div className="flex gap-3">
-                                <a href="#"><Linkedin className="w-5 h-5" /></a>
-                                <a href="#"><Instagram className="w-5 h-5" /></a>
-                            </div>
-                            <p className="text-xs text-muted-foreground">DamienVigouroux@gmail.com</p>
-                            <a href="/mentions-legales" className="italic text-sm">Mentions légales</a>
-                        </div>
+                {/* Footer du menu */}
+                <div className="flex flex-col items-end space-y-2 mt-6">
+                    <div className="flex gap-3">
+                        <a href="#"><Linkedin className="w-5 h-5" /></a>
+                        <a href="#"><Instagram className="w-5 h-5" /></a>
                     </div>
-                </>
-            )}
+                    <p className="text-xs text-muted-foreground">DamienVigouroux@gmail.com</p>
+                    <a href="/mentions-legales" className="italic text-sm">Mentions légales</a>
+                </div>
+            </div>
         </>
     );
 }
