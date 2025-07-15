@@ -102,8 +102,9 @@ export default function TarifsPage() {
                     </TabsContent>
                     <TabsContent
                         value="agenda"
-                        className="w-full h-full flex flex-col justify-center items-center mt-5"
+                        className="w-full h-full flex flex-col items-start justify-start mt-5"
                     >
+                        <h2 className="mb-4 text-xl font-semibold">Contactez moi :</h2>
                         <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-full md:w-1/2">
                             <input
                                 type="text"
@@ -122,11 +123,11 @@ export default function TarifsPage() {
                                 className="border rounded p-2"
                             />
                             <textarea
-                                placeholder="Votre message"
+                                placeholder="Bonjour je souhaite prendre rdv pour une journee seriez vous disponible le...."
                                 value={formData.message}
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                 required
-                                className="border rounded p-2 h-32"
+                                className="border rounded p-2 h-32 placeholder:opacity-50"
                             />
                             <button type="submit" className="bg-black text-white py-2 rounded hover:bg-gray-800">
                                 Envoyer
