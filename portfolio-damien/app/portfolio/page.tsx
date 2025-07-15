@@ -80,7 +80,7 @@ export default function PortfolioPage() {
                 transition={{ duration: 0.5, ease: "easeOut" }}
             >
                 {/* Swiper desktop */}
-                <div className="hidden md:flex w-full max-w-5xl h-[1000px] rounded-lg overflow-hidden">
+                <div className="hidden md:flex w-full max-w-5xl h-[70vh] lg:h-[90vh] rounded-lg overflow-hidden">
                     <Swiper
                         modules={[Navigation, Pagination, Autoplay, EffectFade]}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -110,7 +110,7 @@ export default function PortfolioPage() {
                                                 alt={event.title}
                                                 width={1600}
                                                 height={900}
-                                                className="object-cover max-h-[500px] w-full"
+                                                className="object-cover max-h-[60vh] w-full"
                                             />
                                         )}
 
