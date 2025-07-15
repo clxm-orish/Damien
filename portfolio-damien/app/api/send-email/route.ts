@@ -8,10 +8,11 @@ export async function POST(req: Request) {
 
     try {
         const data = await resend.emails.send({
-            from: body.email,
+            from: 'onboarding@resend.dev', // adresse par défaut Resend
             to: 'clmwebagency@gmail.com',
+            replyTo: body.email, // <-- Permet de "répondre" au vrai utilisateur
             subject: `Nouveau message de ${body.name}`,
-            text: `Email: ${body.email}\n\nMessage:\n${body.message}`,
+            text: `Email de l'utilisateur : ${body.email}\n\nMessage :\n${body.message}`,
         });
 
         return NextResponse.json({ success: true, data });
