@@ -59,7 +59,7 @@ export default function HomePage() {
           speed={800}
           spaceBetween={30}
           slidesPerView={1}
-          className="overflow-hidden flex h-[700px] w-full"
+          className="overflow-hidden flex h-[65vh] sm:h-[700px] w-full"
         >
           {images.map((src, index) => (
             <SwiperSlide key={index} className="flex justify-center items-center h-full">

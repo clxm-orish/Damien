@@ -56,10 +56,10 @@ export default function AboutPage() {
             alt={data.title}
             width={800}
             height={600}
-            className="w-1/2 h-full object-cover object-[center_top]"
+            className="w-full md:w-1/2 h-full object-cover object-[center_top]"
             priority
           />
-          <div className="md:w-1/2 pl-8 h-full">
+          <div className="w-full md:w-1/2 md:pl-8 h-full mt-6 md:mt-0">
             <h1 className="text-6xl font-bold mb-6">{data.title}</h1>
             <article className='text-left text-lg text-gray-700'>
               <PortableText value={data.description} />

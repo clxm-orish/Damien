@@ -30,7 +30,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ slug: 
     if (!imagesDoc || !imagesDoc.gallery || imagesDoc.gallery.length === 0) {
         return (
             <main className="h-full flex flex-col justify-center items-center p-6 sm:p-12">
-                <div className="w-1/2 align-center justify-center">
+                <div className="w-full sm:w-1/2 align-center justify-center text-center sm:text-left">
                     <BackButton />
                     <p className="text-start text-lg text-gray-700 mt-6">
                         Il n&apos;y a pas encore de photos pour ce projet.
