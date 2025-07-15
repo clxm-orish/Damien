@@ -162,7 +162,7 @@ export default function PortfolioPage() {
                                     alt={event.title}
                                     width={160}
                                     height={120}
-                                    className=" object-cover w-1/4 mi'h-full"
+                                    className="object-cover w-1/4 min-h-full"
                                 />
                             )}
 
