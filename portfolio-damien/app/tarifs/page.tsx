@@ -23,6 +23,13 @@ interface Tarif {
     description: TypedObject;
 }
 
+declare global {
+    interface Window {
+        onCaptchaVerified: (token: string) => void;
+    }
+}
+
+
 export default function TarifsPage() {
     const [tarifs, setTarifs] = useState<Tarif[]>([]);
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -39,9 +46,10 @@ export default function TarifsPage() {
             script.defer = true;
             document.body.appendChild(script);
         }
-        (window as any).onCaptchaVerified = (token: string) => {
+        window.onCaptchaVerified = (token: string) => {
             setCaptchaToken(token);
         };
+
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
