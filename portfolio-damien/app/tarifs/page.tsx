@@ -27,16 +27,36 @@ export default function TarifsPage() {
     const [tarifs, setTarifs] = useState<Tarif[]>([]);
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState('');
+    const [captchaToken, setCaptchaToken] = useState('');
+
+    useEffect(() => {
+        const scriptId = 'recaptcha-script';
+        if (!document.getElementById(scriptId)) {
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.src = 'https://www.google.com/recaptcha/api.js';
+            script.async = true;
+            script.defer = true;
+            document.body.appendChild(script);
+        }
+        (window as any).onCaptchaVerified = (token: string) => {
+            setCaptchaToken(token);
+        };
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!captchaToken) {
+            setStatus('Veuillez compléter le reCAPTCHA.');
+            return;
+        }
         setStatus('Envoi en cours...');
 
         try {
             const res = await fetch('/api/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, token: captchaToken }),
             });
 
             if (res.ok) {
@@ -128,6 +148,11 @@ export default function TarifsPage() {
                                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                 required
                                 className="border rounded p-2 h-32 placeholder:opacity-50"
+                            />
+                            <div
+                                className="g-recaptcha"
+                                data-sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''}
+                                data-callback="onCaptchaVerified"
                             />
                             <button type="submit" className="bg-black text-white py-2 rounded hover:bg-gray-800">
                                 Envoyer
