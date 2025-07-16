@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
     Accordion,
@@ -12,6 +12,7 @@ import { client } from '@/src/sanity/client';
 import { PortableText } from '@portabletext/react';
 import { motion } from 'framer-motion';
 import { TypedObject } from 'sanity';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 
 
@@ -23,34 +24,18 @@ interface Tarif {
     description: TypedObject;
 }
 
-declare global {
-    interface Window {
-        onCaptchaVerified: (token: string) => void;
-    }
-}
-
-
 export default function TarifsPage() {
     const [tarifs, setTarifs] = useState<Tarif[]>([]);
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState('');
     const [captchaToken, setCaptchaToken] = useState('');
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
 
-    useEffect(() => {
-        const scriptId = 'recaptcha-script';
-        if (!document.getElementById(scriptId)) {
-            const script = document.createElement('script');
-            script.id = scriptId;
-            script.src = 'https://www.google.com/recaptcha/api.js';
-            script.async = true;
-            script.defer = true;
-            document.body.appendChild(script);
-        }
-        window.onCaptchaVerified = (token: string) => {
+    const handleCaptchaChange = (token: string | null) => {
+        if (token) {
             setCaptchaToken(token);
-        };
-
-    }, []);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -157,10 +142,10 @@ export default function TarifsPage() {
                                 required
                                 className="border rounded p-2 h-32 placeholder:opacity-50"
                             />
-                            <div
-                                className="g-recaptcha"
-                                data-sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''}
-                                data-callback="onCaptchaVerified"
+                            <ReCAPTCHA
+                                ref={recaptchaRef}
+                                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ''}
+                                onChange={handleCaptchaChange}
                             />
                             <button type="submit" className="bg-black text-white py-2 rounded hover:bg-gray-800">
                                 Envoyer
