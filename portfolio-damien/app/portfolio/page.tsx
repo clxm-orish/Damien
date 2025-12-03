@@ -15,6 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { motion } from "framer-motion";
 import { usePageTransition } from '../../hooks/PageTransitionProvider';
+import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { TypedObject } from 'sanity';
@@ -31,7 +32,8 @@ const EVENTS_QUERY = defineQuery(`*[_type == "event"] | order(_createdAt desc) {
 }`);
 
 export default function PortfolioPage() {
-    const { startTransition, endPageLoad } = usePageTransition();
+    const router = useRouter();
+    const { endPageLoad } = usePageTransition();
     const swiperRef = useRef<{ slideNext: () => void; slidePrev: () => void } | null>(null);
     const [events, setEvents] = useState<
         {
@@ -134,7 +136,7 @@ export default function PortfolioPage() {
 
                                     <div className="w-full flex justify-end pt-4">
                                         <Button
-                                            onClick={() => startTransition(`/portfolio/gallerie/gallery-${event.slug.current}`)}
+                                            onClick={() => router.push(`/portfolio/gallerie/gallery-${event.slug.current}`)}
                                             className="bg-[#2B2B2B] hover:bg-[#1a1a1a] text-white cursor-pointer"
                                         >
                                             <span className="flex items-center space-x-2">
@@ -172,7 +174,7 @@ export default function PortfolioPage() {
                                     <PortableText value={event.description} />
                                 </div>
                                 <Button
-                                    onClick={() => startTransition(`/portfolio/gallerie/gallery-${event.slug.current}`)}
+                                    onClick={() => router.push(`/portfolio/gallerie/gallery-${event.slug.current}`)}
                                     className="mt-2 bg-[#2B2B2B] hover:bg-[#1a1a1a] text-white py-1 px-2 text-xs"
                                 >
                                     Photos →
